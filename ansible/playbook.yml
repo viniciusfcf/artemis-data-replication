@@ -1,0 +1,34 @@
+- hosts: localhost
+  name: Install Artemis Data Replication Demo
+  vars:
+    dc_a_server: https://api.cluster-578cf.578cf.sandbox1078.opentlc.com:6443
+    dc_b_server: https://api.cluster-h9xg5.h9xg5.sandbox72.opentlc.com:6443
+    
+    # artemis
+    dc_a_artemis_cluster: my-source-cluster
+    dc_b_artemis_cluster: my-target-cluster
+    dc_a_artemis_namespace: artemis-a
+    dc_b_artemis_namespace: artemis-b
+    external: true
+
+    grafana_user: admin
+    grafana_password: admin
+    insecure_skip_tls_verify: true
+    delete_demo: false
+
+  tasks:
+
+    - name: DC A - Define domain
+      set_fact:
+        dc_a_domain : "{{ dc_a_server | regex_replace('https://api.') | regex_replace(':6443')   }}"
+
+    - name: DC B - Define domain
+      set_fact:
+        dc_b_domain : "{{ dc_b_server | regex_replace('https://api.') | regex_replace(':6443')   }}"
+
+    - name: Include AMQ Broker role
+      include_role:
+        name: amq-broker
+
+    
+    

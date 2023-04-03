@@ -1,0 +1,10 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemisAddress
+metadata:
+  name: person
+spec:
+  addressName: person
+  queueName: person
+  routingType: anycast
+  removeFromBrokerOnDelete: true
+

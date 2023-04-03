@@ -1,0 +1,60 @@
+apiVersion: broker.amq.io/v1beta1
+kind: ActiveMQArtemis
+metadata:
+  name: artemis-a
+  application: artemis-a-app
+spec:
+  acceptors:
+  - anycastPrefix: jms.queue.
+    multicastPrefix: /topic/
+    name: acceptor
+    port: 5672
+    protocols: amqp,openwire,core
+  - anycastPrefix: jms.queue.
+    multicastPrefix: /topic/
+    name: mirror
+    port: 5673
+    protocols: amqp
+    expose: true
+  addressSettings: {}
+  adminPassword: temporal
+  adminUser: admin
+  brokerProperties:
+  - "AMQPConnections.target.uri=tcp://artemis-b-mirror-0-svc.{{ dc_b_artemis_namespace }}.svc.cluster.local:5673?clientFailureCheckPeriod=2000&connectionTTL=5000"
+  - "AMQPConnections.target.retryInterval=5000"
+  - "AMQPConnections.target.reconnect-attempts=-1"
+  - "AMQPConnections.target.user=admin"
+  - "AMQPConnections.target.password=temporal"
+  - "AMQPConnections.target.autoStart=true"
+  - "AMQPConnections.target.connectionElements.mirror.type=MIRROR"
+  - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
+  - "AMQPConnections.target.connectionElements.mirror.queueCreation=true"
+  - "AMQPConnections.target.connectionElements.mirror.queueRemoval=true"
+  console:
+    expose: true
+    sslEnabled: false
+  deploymentPlan:
+    clustered: true
+    extraMounts: {}
+    image: placeholder
+    journalType: nio
+    livenessProbe: {}
+    managementRBACEnabled: true
+    messageMigration: true
+    persistenceEnabled: true
+    podSecurity: {}
+    readinessProbe: {}
+    requireLogin: false
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 200m
+        memory: 128Mi
+    size: 1
+    storage:
+      size: 2Gi
+  upgrades:
+    enabled: false
+    minor: false
