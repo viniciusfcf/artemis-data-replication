@@ -165,3 +165,7 @@ kamel run --config configmap:jms-source-config -d mvn:org.amqphub.quarkus:quarku
 * Automate certs generation
 * Automate secret creation pointing to certs
 * Automate the deploy of producer and consumer
+
+
+
+./artemis producer --url tcp://artemis-broker-hdls-svc:61616 --destination person --message-count 10

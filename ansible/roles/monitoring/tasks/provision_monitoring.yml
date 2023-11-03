@@ -1,0 +1,27 @@
+- name: Evaluate User Workload Monitoring
+  k8s:
+    state: present
+    kind: ConfigMap
+    api_version: v1
+    definition:
+      metadata:
+        name: cluster-monitoring-config
+        namespace: openshift-monitoring
+      data:
+        config.yaml: |
+          enableUserWorkload: true
+          prometheusK8s:
+            volumeClaimTemplate:
+              metadata:
+                name: prometheusdb
+              spec:
+                storageClassName: ocs-external-storagecluster-ceph-rbd
+                resources:
+                  requests:
+                    storage: 20Gi
+
+- name: Evaluate Grafana Instance
+  k8s:
+    state: present
+    namespace: '{{ dc_a_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'grafana_instance.yml.j2') }}"
