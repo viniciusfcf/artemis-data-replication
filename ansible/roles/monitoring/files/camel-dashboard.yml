@@ -1,11 +1,13 @@
-apiVersion: integreatly.org/v1alpha1
+apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
   name: camel
   labels:
     app: grafana
 spec:
-  name: camel.json
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana-a
   json: |
     {
       "annotations": {

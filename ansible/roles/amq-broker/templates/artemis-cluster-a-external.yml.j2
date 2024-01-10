@@ -5,16 +5,12 @@ metadata:
   application: artemis-a-app
 spec:
   acceptors:
-  - anycastPrefix: jms.queue.
-    multicastPrefix: /topic/
-    name: acceptor
+  - name: acceptor
     port: 5672
     protocols: amqp,openwire,core
-  - anycastPrefix: jms.queue.
-    multicastPrefix: /topic/
+  - name: mirror
     enabledProtocols: TLSv1.2
     expose: true
-    name: mirror
     port: 5673
     protocols: amqp
     sslEnabled: true

@@ -26,9 +26,9 @@
       set_fact:
         dc_b_domain : "{{ dc_b_server | regex_replace('https://api.') | regex_replace(':6443')   }}"
 
-    - name: Include AMQ Broker role
-      include_role:
-        name: amq-broker
+    # - name: Include AMQ Broker role
+    #   include_role:
+    #     name: amq-broker
 
     - name: Include Monitoring role
       include_role:
