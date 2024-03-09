@@ -1,0 +1,22 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: artemis-b-console
+  namespace: {{ dc_b_artemis_namespace }}
+  labels:
+    ActiveMQArtemis: {{ dc_b_artemis_namespace }}
+    application: {{ dc_b_artemis_namespace }}-app
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: amq-console-{{ dc_b_artemis_namespace }}.apps.pgjwbjq2.eastus2.aroapp.io
+  to:
+    kind: Service
+    name: {{ dc_b_artemis_namespace }}-wconsj-0-svc
+    weight: 100
+  port:
+    targetPort: wconsj
+  tls:
+    termination: edge
+  wildcardPolicy: None
+

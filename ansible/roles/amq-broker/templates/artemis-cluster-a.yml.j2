@@ -1,26 +1,26 @@
 apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
-  name: artemis-a
-  application: artemis-a-app
+  name: {{ dc_a_artemis_namespace }}
+  application: {{ dc_a_artemis_namespace  }}-app
 spec:
   acceptors:
   - name: acceptor
-    port: 5672
-    protocols: amqp,openwire,core
+    port: 61616
+    protocols: AMQP,CORE,STOMP
   - name: mirror
     port: 5673
-    protocols: amqp
+    protocols: AMQP
     expose: true
   addressSettings: {}
-  adminPassword: temporal
+  adminPassword: amqintadmin
   adminUser: admin
   brokerProperties:
-  - "AMQPConnections.target.uri=tcp://artemis-b-mirror-0-svc.{{ dc_b_artemis_namespace }}.svc.cluster.local:5673?clientFailureCheckPeriod=2000&connectionTTL=5000"
+  - "AMQPConnections.target.uri=tcp://{{ dc_b_artemis_namespace  }}-mirror-0-svc.{{ dc_b_artemis_namespace }}.svc.cluster.local:5673?clientFailureCheckPeriod=2000&connectionTTL=5000"
   - "AMQPConnections.target.retryInterval=5000"
   - "AMQPConnections.target.reconnect-attempts=-1"
   - "AMQPConnections.target.user=admin"
-  - "AMQPConnections.target.password=temporal"
+  - "AMQPConnections.target.password=amqintadmin"
   - "AMQPConnections.target.autoStart=true"
   - "AMQPConnections.target.connectionElements.mirror.type=MIRROR"
   - "AMQPConnections.target.connectionElements.mirror.messageAcknowledgements=true"
@@ -41,17 +41,14 @@ spec:
     persistenceEnabled: true
     podSecurity: {}
     readinessProbe: {}
-    requireLogin: false
+    requireLogin: true
     resources:
-      limits:
-        cpu: 1
-        memory: 1Gi
       requests:
         cpu: 200m
         memory: 128Mi
     size: 1
     storage:
-      size: 2Gi
+      size: {{ broker_disk_size }}
   upgrades:
     enabled: false
     minor: false

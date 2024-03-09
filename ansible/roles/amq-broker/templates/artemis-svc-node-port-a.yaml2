@@ -1,0 +1,26 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ dc_a_artemis_namespace }}-nodeport
+  namespace: {{ dc_a_artemis_namespace }}
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: 'true'
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+spec:
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: artemis
+      protocol: TCP
+      port: 61616
+      targetPort: 61616
+  internalTrafficPolicy: Cluster
+  allocateLoadBalancerNodePorts: true
+  type: LoadBalancer
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    ActiveMQArtemis: {{ dc_a_artemis_namespace }}
+    application: {{ dc_a_artemis_namespace }}-app

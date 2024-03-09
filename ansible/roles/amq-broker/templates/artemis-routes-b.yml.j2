@@ -1,0 +1,22 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: artemis-b-wconsj-route
+  namespace: {{ dc_b_artemis_namespace }}
+  labels:
+    ActiveMQArtemis: artemis-b
+    application: artemis-b-app
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  host: amq-wconsj-{{ dc_b_artemis_namespace }}.apps.pgjwbjq2.eastus2.aroapp.io
+  to:
+    kind: Service
+    name: artemis-b-wconsj-0-svc
+    weight: 100
+  port:
+    targetPort: wconsj
+  tls:
+    termination: edge
+  wildcardPolicy: None
+

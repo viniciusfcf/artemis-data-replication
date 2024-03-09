@@ -1,4 +1,4 @@
-- name: DC A - Evaluate Artemis Namespace
+- name: DC A - Evaluate Artemis Namespace "{{ dc_a_artemis_namespace }}"
   k8s:
     host: "{{ dc_a_server }}"
     api_key: "{{ dc_a_token }}"
@@ -10,7 +10,7 @@
       metadata:
         name: "{{ dc_a_artemis_namespace }}"
 
-- name: DC B - Evaluate Artemis Namespace
+- name: DC B - Evaluate Artemis Namespace "{{ dc_b_artemis_namespace }}"
   k8s:
     api_key: "{{ dc_b_token }}"
     host: "{{ dc_b_server }}"
@@ -22,7 +22,7 @@
       metadata:
         name: "{{ dc_b_artemis_namespace }}"
 
-- name: DC A - Evaluate AMQ Broker instance
+- name: DC A - Evaluate AMQ Broker instance "{{ dc_a_artemis_namespace }}"
   k8s:
     host: "{{ dc_a_server }}"
     api_key: "{{ dc_a_token }}"
@@ -32,7 +32,7 @@
     resource_definition: "{{ lookup('template', 'artemis-cluster-a.yml.j2') }}"
   when: not external | bool
 
-- name: DC B - Evaluate AMQ Broker instance
+- name: DC B - Evaluate AMQ Broker instance "{{ dc_b_artemis_namespace }}"
   k8s:
     host: "{{ dc_b_server }}"
     api_key: "{{ dc_b_token }}"
@@ -42,7 +42,68 @@
     resource_definition: "{{ lookup('template', 'artemis-cluster-b.yml.j2') }}"
   when: not external | bool
 
-# - name: DC A - Evaluate AMQ Broker EXTERNAL instance
+- name: DC A - Evaluate AMQ Broker Routes "{{ dc_a_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_a_server }}"
+    api_key: "{{ dc_a_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_a_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-routes-a.yml.j2') }}"
+  when: not external | bool
+
+- name: DC A - Evaluate AMQ Broker Console Route "{{ dc_a_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_a_server }}"
+    api_key: "{{ dc_a_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_a_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-console-route-a.yml.j2') }}"
+  when: not external | bool
+
+- name: DC B - Evaluate AMQ Broker Routes "{{ dc_b_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_b_server }}"
+    api_key: "{{ dc_b_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_b_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-routes-b.yml.j2') }}"
+  when: not external | bool
+
+- name: DC B - Evaluate AMQ Broker Console Route "{{ dc_b_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_b_server }}"
+    api_key: "{{ dc_b_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_b_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-console-route-b.yml.j2') }}"
+  when: not external | bool
+
+- name: DC A - Evaluate AMQ Broker Node Port "{{ dc_a_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_a_server }}"
+    api_key: "{{ dc_a_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_a_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-svc-node-port-a.yaml2') }}"
+  when: not external | bool
+
+- name: DC B - Evaluate AMQ Broker Node Port "{{ dc_b_artemis_namespace }}"
+  k8s:
+    host: "{{ dc_b_server }}"
+    api_key: "{{ dc_b_token }}"
+    validate_certs: false
+    state: present
+    namespace: '{{ dc_b_artemis_namespace }}'
+    resource_definition: "{{ lookup('template', 'artemis-svc-node-port-b.yaml2') }}"
+  when: not external | bool
+
+
+# - name: DC A - Evaluate AMQ Broker EXTERNAL instance "{{ dc_a_artemis_namespace }}"
 #   k8s:
 #     host: "{{ dc_a_server }}"
 #     api_key: "{{ dc_a_token }}"
@@ -52,7 +113,7 @@
 #     resource_definition: "{{ lookup('template', 'artemis-cluster-a-external.yml.j2') }}"
 #   when: external | bool
 
-# - name: DC B - Evaluate AMQ Broker EXTERNAL instance
+# - name: DC B - Evaluate AMQ Broker EXTERNAL instance "{{ dc_b_artemis_namespace }}"
 #   k8s:
 #     host: "{{ dc_b_server }}"
 #     api_key: "{{ dc_b_token }}"
@@ -62,11 +123,11 @@
 #     resource_definition: "{{ lookup('template', 'artemis-cluster-b-external.yml.j2') }}"
 #   when: external | bool
 
-- name: DC A - Evaluate AMQ Broker Queue - DC A
-  k8s:
-    host: "{{ dc_a_server }}"
-    api_key: "{{ dc_a_token }}"
-    validate_certs: false
-    state: present
-    namespace: '{{ dc_a_artemis_namespace }}'
-    resource_definition: "{{ lookup('file', 'artemis-person-queue.yml') }}"
+#- name: DC A - Evaluate AMQ Broker Queue - DC A "{{ dc_a_artemis_namespace }}"
+#  k8s:
+#    host: "{{ dc_a_server }}"
+#    api_key: "{{ dc_a_token }}"
+#    validate_certs: false
+#    state: present
+#    namespace: '{{ dc_a_artemis_namespace }}'
+#    resource_definition: "{{ lookup('file', 'artemis-person-queue.yml') }}"
