@@ -49,7 +49,7 @@ export dc_b_server=https://api.cluster-z7lzh.z7lzh.sandbox2851.opentlc.com:6443
 export external=true
 
 cd ansible
-ansible-playbook -e dc_a_token=${dc_a_token} -e dc_b_token=${dc_b_token} -e dc_a_server=${dc_a_server} -e dc_b_server=${dc_b_server} playbook.yml
+ansible-playbook -e external=${external} -e dc_a_token=${dc_a_token} -e dc_b_token=${dc_b_token} -e dc_a_server=${dc_a_server} -e dc_b_server=${dc_b_server} playbook.yml
 ----
 
 == Certificates

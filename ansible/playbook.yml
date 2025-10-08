@@ -16,7 +16,7 @@
     insecure_skip_tls_verify: true
     delete_demo: false
 
-    broker_disk_size: 2GiB
+    broker_disk_size: 2Gi
 
   tasks:
 
